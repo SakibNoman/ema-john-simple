@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { createContext, useState } from 'react';
 import {
   BrowserRouter as Router,
 
@@ -9,15 +10,19 @@ import Header from './components/Header/Header';
 import Inventory from './components/Inventory/Inventory';
 import Login from './components/Login/Login';
 import NoFound from './components/NoFound/NoFound';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import ProductDetails from './components/ProductDetails.js/ProductDetails';
 import Review from './components/Review/Review';
 import Shipment from './components/Shipment/Shipment';
 import Shop from './components/Shop/Shop';
 
+export const UserContext = createContext();
 
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState({});
   return (
-    <div>
+    <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
+      <h4>Email:{loggedInUser.email}</h4>
       <Router>
         <Header></Header>
         <Switch>
@@ -30,9 +35,9 @@ function App() {
           <Route path="/inventory" >
             <Inventory></Inventory>
           </Route>
-          <Route path="/shipment" >
+          <PrivateRoute path="/shipment" >
             <Shipment></Shipment>
-          </Route>
+          </PrivateRoute>
           <Route path="/login" >
             <Login></Login>
           </Route>
@@ -47,7 +52,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
-    </div>
+    </UserContext.Provider>
 
   );
 }
